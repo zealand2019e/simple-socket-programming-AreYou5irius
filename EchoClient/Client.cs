@@ -24,9 +24,10 @@ namespace EchoClient
             StreamReader sr = new StreamReader(stream);
             StreamWriter sw = new StreamWriter(stream);
 
+            sw.AutoFlush = true;
 
-            sw.WriteLine("Hej");
-            sw.Flush();
+            //sw.WriteLine("Hej");
+            //sw.Flush();
 
             string line = sr.ReadLine();
 
