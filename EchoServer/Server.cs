@@ -10,22 +10,25 @@ namespace EchoServer
 {
     class Server
     {
+
         private static int clientNr = 1;
 
         public static void Start()
         {
 
 
-            //Set the TcpListener on port 7777. 
+            //her sætter vi TcpListener til port 7777 ig IP adressen til den lokale ip
             Int32 port = 7777;
             IPAddress localAddr = IPAddress.Loopback;
 
-            // TcpListener server = new TcpListener(port);
             TcpListener server = new TcpListener(localAddr, port);
 
-            // Start listening for client requests.
+            // Her Starter vi serveren (altså skaber forbindelse til IP og Port)  (listening for client requests.)
             server.Start();
 
+            //Her er den sat op så den kan tage imod flere clienter samtidig 
+            //først angiver vi at serveren skal tage imod vores client
+            // så siger vi hvis der er clienter på serveren skal den køre DoClient, hvis der ikke er nogle clienter på stopper serveren.
             do
             {
                 TcpClient client = server.AcceptTcpClient();
@@ -55,15 +58,20 @@ namespace EchoServer
 
         public static void DoClient(TcpClient client, int clientNr)
         {
+            //her holder vi styr på hvilke client nr clienten er.
             int Nr = clientNr;
-            // Get a stream object for reading and writing
+
+            // Her bliver der oprettet en stream på clienten så der skal skrives til den og fra den. (Get a stream object for reading and writing)
             NetworkStream stream = client.GetStream();
 
             StreamReader sr = new StreamReader(stream);
             StreamWriter sw = new StreamWriter(stream);
             sw.AutoFlush = true; // enable automatic flushing
 
-
+            //her fortæller vi at serveren skal aflæse den besked vi skriver.
+            //når beskeden bliver læst tæller den ord u´dfra det kriterie at et ord slutter med et mellemrum og at beskeden skal læses til ende
+            //(den fulde længde og at det sidste ord ikke har et mellemrum til sidst)
+            //og skrives der "luk" afbrydes forbindelsen (til stream og client)
             while (true)
             {
                 string message = sr.ReadLine();
